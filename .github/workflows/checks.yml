@@ -33,7 +33,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
-      - run: pnpm test --ci
+      - run: pnpm test -- --ci
       - name: Sanitization scan
         run: scripts/check-sanitization.sh
 
