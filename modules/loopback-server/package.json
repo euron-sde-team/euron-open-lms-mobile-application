@@ -1,0 +1,13 @@
+{
+  "name": "open-lms-loopback",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tiny HTTP server on 127.0.0.1 that plays downloaded HLS lectures offline, holding their AES keys in memory only.",
+  "license": "MIT",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": ["index.js", "index.d.ts", "ios", "android", "open-lms-loopback.podspec", "react-native.config.js"],
+  "peerDependencies": {
+    "react-native": "*"
+  }
+}

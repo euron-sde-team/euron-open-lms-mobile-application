@@ -1,0 +1,56 @@
+# Opens an earned certificate from My Learning: learner, course, serial and the share
+# actions. The PDF may still be rendering on a fresh stack, so the download button is
+# optional.
+# Demo data: juniper.vale@example.com finished a course with a certificate (the seed's
+# login list says so; which course is decided by the seed).
+appId: com.example.openlms
+name: 06-certificate
+tags:
+  - assessments
+  - certificate
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- tapOn:
+    id: "tab-learning"
+- extendedWaitUntil:
+    visible:
+      id: "learning-tabs"
+    timeout: 15000
+- tapOn:
+    id: "learning-tabs-certificates"
+- extendedWaitUntil:
+    visible:
+      id: "learning-certificate"
+    timeout: 15000
+- tapOn:
+    id: "learning-certificate"
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      id: "certificate"
+    timeout: 15000
+- assertVisible:
+    id: "certificate-status"
+- assertVisible:
+    id: "certificate-learner"
+- assertVisible:
+    id: "certificate-course"
+- scrollUntilVisible:
+    element:
+      id: "certificate-serial"
+    direction: DOWN
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "certificate-share-link"
+    direction: DOWN
+    timeout: 10000
+- assertVisible:
+    id: "certificate-download"
+    optional: true

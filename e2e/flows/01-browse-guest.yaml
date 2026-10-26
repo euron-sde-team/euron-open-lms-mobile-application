@@ -1,0 +1,64 @@
+# A guest browses without an account: Home, a search on Explore, a paid course page and a
+# free one. Nothing personal opens without signing in, and no platform shows a price
+# action to a guest (Android asks to sign in; iOS never sells in the app).
+# Demo data: practical-sql (PAID), git-and-code-review (FREE).
+appId: com.example.openlms
+name: 01-browse-guest
+tags:
+  - guest
+  - catalog
+---
+- runFlow: common/fresh-start.yaml
+- assertVisible:
+    id: "catalog-home-sign-in"
+
+# Explore: search finds the SQL course.
+- tapOn:
+    id: "tab-explore"
+- assertVisible:
+    id: "catalog-explore"
+- tapOn:
+    id: "catalog-explore-search"
+- inputText: "SQL"
+- pressKey: Enter
+- extendedWaitUntil:
+    visible:
+      text: "Practical SQL for Analysts"
+    timeout: 15000
+- tapOn:
+    text: "Practical SQL for Analysts"
+
+# The course page: title, facts, curriculum and a sign-in action instead of a purchase.
+- extendedWaitUntil:
+    visible:
+      id: "catalog-course-title"
+    timeout: 15000
+- assertVisible:
+    id: "catalog-course-facts"
+- assertVisible:
+    id: "catalog-purchase-bar"
+- assertVisible:
+    id: "catalog-cta-signin"
+- assertNotVisible:
+    id: "catalog-cta-buy"
+- scrollUntilVisible:
+    element:
+      id: "catalog-curriculum"
+    direction: DOWN
+    timeout: 15000
+
+# A free course asks for an account to enroll.
+- openLink: openlms://courses/git-and-code-review
+- extendedWaitUntil:
+    visible:
+      id: "catalog-course-title"
+    timeout: 15000
+- assertVisible:
+    text: "Sign in to enroll for free"
+
+# My Learning asks a guest to sign in.
+- openLink: openlms://my-learning
+- extendedWaitUntil:
+    visible:
+      id: "learning-guest"
+    timeout: 10000

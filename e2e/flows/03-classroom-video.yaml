@@ -1,0 +1,69 @@
+# Opens a course through the plan and plays a video lesson with the app's own controls:
+# play and pause, 10 s forward and back, the settings sheet. The lesson is a free preview,
+# so screen capture protection stays off and Maestro screenshots are not black.
+# Demo data: juniper.vale@example.com (All-Access plan includes practical-sql);
+# "Your first SELECT" is a READY EVS video served by the local video stand-in.
+appId: com.example.openlms
+name: 03-classroom-video
+tags:
+  - learning
+  - video
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- openLink: openlms://learn/practical-sql
+- runFlow:
+    file: common/open-lesson.yaml
+    env:
+      SECTION: "Section 1: Asking the database.*"
+      LESSON: "Your first SELECT, .*"
+- extendedWaitUntil:
+    visible:
+      id: "learning-item-title"
+    timeout: 15000
+- assertVisible:
+    id: "player"
+
+# The controls hide 3 s after a touch while playing, and a spinner replaces the toggle
+# while buffering: tap the surface until the toggle shows, then pause.
+- repeat:
+    times: 15
+    while:
+      notVisible:
+        id: "player-toggle"
+    commands:
+      - tapOn:
+          id: "player-surface"
+      - waitForAnimationToEnd:
+          timeout: 2000
+- tapOn:
+    id: "player-toggle"
+- assertVisible:
+    id: "player-fwd10"
+- tapOn:
+    id: "player-fwd10"
+- tapOn:
+    id: "player-back10"
+
+# The settings sheet offers speeds.
+- tapOn:
+    id: "player-settings"
+- extendedWaitUntil:
+    visible:
+      id: "player-sheet"
+    timeout: 5000
+- assertVisible: "1.5x"
+- tapOn: "1.5x"
+- tapOn: "Close"
+
+# Previous and Next move through the curriculum.
+- tapOn:
+    id: "learning-next"
+- extendedWaitUntil:
+    visible:
+      id: "learning-item-title"
+    timeout: 15000

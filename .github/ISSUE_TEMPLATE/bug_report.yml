@@ -1,0 +1,71 @@
+name: Bug report
+description: Something in the app does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Security issues: do not file here**, follow SECURITY.md instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. For checkout problems say which gateway (Stripe or Razorpay, real or the local stub).
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. make up && make demo in euron-open-lms, pnpm ios
+        2. Sign in as the demo learner, open a course ...
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: ["iOS", "Android", "Both"]
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: "iPhone 16 simulator, Pixel 8, ..."
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS version
+      placeholder: "iOS 26.0, Android 15"
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version and build
+      description: Account, About, or the commit you built.
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Server version
+      description: The euron-open-lms version or commit the app talked to.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: ["Catalog and course pages", "Sign in and account", "Classroom and video", "Offline downloads", "Quizzes", "Assignments", "Certificates", "Checkout (Android)", "Push notifications", "Build and setup", "Other"]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Metro, Xcode or logcat output. Redact tokens, keys and hostnames before pasting.
+      render: text

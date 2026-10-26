@@ -1,0 +1,87 @@
+# Android only: buys a course in the app in INR. The server routes INR to Razorpay; on the
+# local stack the Razorpay stand-in answers with a stub checkout page, which the app
+# opens in a WebView instead of the native Razorpay sheet. Pay on that page returns to
+# openlms://checkout/razorpay, the app confirms the payment and the result screen polls
+# the order until it is paid. The app never sends an amount: the quote comes from the
+# server (price plus 18% GST for India).
+# Demo data: rohan.mehta@example.com pays in INR and owns the production-ready-engineer
+# bundle, not practical-sql. After one successful run he owns practical-sql, so a second
+# run against the same stack only checks that the course opens (run `make demo` on a
+# fresh stack to buy again).
+appId: com.example.openlms
+name: 07-android-purchase-razorpay-stub
+tags:
+  - android
+  - checkout
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow: common/fresh-start.yaml
+      - runFlow:
+          file: common/sign-in.yaml
+          env:
+            DEMO_EMAIL: "rohan.mehta@example.com"
+
+      - openLink: openlms://courses/practical-sql
+      - extendedWaitUntil:
+          visible:
+            id: "catalog-purchase-bar"
+          timeout: 15000
+
+      - runFlow:
+          when:
+            visible:
+              id: "catalog-cta-buy"
+          commands:
+            - tapOn:
+                id: "catalog-cta-buy"
+            - extendedWaitUntil:
+                visible:
+                  id: "account-checkout-screen"
+                timeout: 15000
+            # The quote: subtotal, GST and the total in INR, the gateway line.
+            - extendedWaitUntil:
+                visible:
+                  id: "account-checkout-total"
+                timeout: 15000
+            - assertVisible:
+                id: "account-checkout-tax"
+            - assertVisible: "Razorpay: UPI, cards, netbanking"
+            - scrollUntilVisible:
+                element:
+                  id: "account-checkout-country"
+                direction: DOWN
+                timeout: 10000
+            - assertVisible: "India"
+            - tapOn:
+                id: "account-checkout-pay"
+            # The stub checkout page in a WebView: Pay, Fail or Cancel.
+            - extendedWaitUntil:
+                visible:
+                  id: "account-checkout-stub"
+                timeout: 20000
+            - extendedWaitUntil:
+                visible: "Pay"
+                timeout: 20000
+            - tapOn: "Pay"
+            - extendedWaitUntil:
+                visible:
+                  id: "account-checkout-paid"
+                timeout: 60000
+            - assertVisible: "You are enrolled"
+            - tapOn:
+                id: "account-checkout-start"
+            - extendedWaitUntil:
+                visible:
+                  id: "learning-classroom"
+                timeout: 20000
+            - back
+
+      # Owned now, from this run or an earlier one: the course page offers the classroom.
+      - openLink: openlms://courses/practical-sql
+      - extendedWaitUntil:
+          visible:
+            id: "catalog-cta-continue"
+          timeout: 20000

@@ -1,0 +1,25 @@
+name: Feature request
+description: Propose a capability or an improvement for the app.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that is hard or impossible in the app today, and for whom (learners, academy operators, contributors)?
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: ["iOS", "Android", "Both"]
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How you would like it to work. Say whether it needs a server change in euron-open-lms.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

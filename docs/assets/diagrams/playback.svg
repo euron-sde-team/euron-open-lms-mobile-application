@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Lecture playback</title>
+  <desc id="desc">Opening a video lecture posts /learn/items/:itemId/playback. The server checks access and, for euron-video-system lectures, mints a short-lived playback session; the answer names a provider: EVS (an HLS manifest URL with an expiry), HLS, MP4 or YouTube. The app builds the player source only from that answer and plays it in react-native-video with its own controls, or in the YouTube iframe player. Heartbeats go to /learn/items/:itemId/progress every 15 seconds and on pause, end, background and unmount, with the current playhead and the seconds actually played; the server keeps the furthest mark and the watched time and decides completion. A source close to expiry, or a player error, re-mints the session up to three times and resumes at the same position. Paid video is protected from capture with FLAG_SECURE on Android and an overlay on iOS, and a watermark drifts across the picture.</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; }
+    .acc { fill: #ecfafc; stroke: #0E99AD; stroke-width: 1.6; }
+    .zone { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 6 5; }
+    .h { font: 600 20px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .t { font: 600 15px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .s { font: 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #475569; }
+    .m { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f172a; }
+    .k { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b7f90; }
+    .ln { stroke: #64748b; stroke-width: 1.5; fill: none; }
+    .ld { stroke: #64748b; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+    .la { stroke: #0E99AD; stroke-width: 1.8; fill: none; }
+    .ah { fill: #64748b; }
+    .aa { fill: #0E99AD; }
+    .lbl { paint-order: stroke; stroke: #f8fafc; stroke-width: 5px; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0b1220; }
+      .box { fill: #111a2b; stroke: #2b3a55; }
+      .acc { fill: #0d2a33; stroke: #22b8cc; }
+      .zone { stroke: #475569; }
+      .h, .t, .m { fill: #e2e8f0; }
+      .s { fill: #94a3b8; }
+      .k { fill: #5fd3e3; }
+      .ln, .ld { stroke: #7c8aa5; }
+      .ah { fill: #7c8aa5; }
+      .la { stroke: #22b8cc; }
+      .aa { fill: #22b8cc; }
+      .lbl { stroke: #0b1220; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aa" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="720" rx="14"/>
+  <text class="h" x="40" y="48">Lecture playback</text>
+  <text class="s" x="40" y="72">The server decides access and mints the session; the app only plays what it was handed and reports what was watched.</text>
+  <rect class="box" x="40" y="110" width="200" height="104" rx="10"/>
+  <text class="t" x="54" y="138">Classroom</text>
+  <text class="s" x="54" y="164">VideoLesson.tsx</text>
+  <text class="s" x="54" y="184">video lecture READY</text>
+  <text class="s" x="54" y="204">never cached</text>
+  <rect class="acc" x="300" y="110" width="300" height="104" rx="10"/>
+  <text class="t" x="314" y="138">POST /learn/items/:id/playback</text>
+  <text class="s" x="314" y="164">checks access (enrolled, plan,</text>
+  <text class="s" x="314" y="184">preview); mints an EVS session</text>
+  <rect class="box" x="660" y="110" width="240" height="104" rx="10"/>
+  <text class="t" x="674" y="138">Playback</text>
+  <text class="s" x="674" y="164">provider: EVS | HLS |</text>
+  <text class="s" x="674" y="184">MP4 | YOUTUBE, resumeAt,</text>
+  <text class="s" x="674" y="204">watermark, expiresAt</text>
+  <rect class="box" x="960" y="110" width="200" height="104" rx="10"/>
+  <text class="t" x="974" y="138">source.ts</text>
+  <text class="s" x="974" y="164">sourceFromPlayback():</text>
+  <text class="s" x="974" y="184">no URL is built on</text>
+  <text class="s" x="974" y="204">the device</text>
+  <path class="ln" d="M240 162 L298 162" marker-end="url(#a)"/>
+  <path class="ln" d="M600 162 L658 162" marker-end="url(#a)"/>
+  <path class="ln" d="M900 162 L958 162" marker-end="url(#a)"/>
+  <rect class="acc" x="40" y="280" width="340" height="124" rx="10"/>
+  <text class="t" x="54" y="308">Player.tsx</text>
+  <text class="s" x="54" y="334">react-native-video, own controls</text>
+  <text class="s" x="54" y="354">speed, quality, captions</text>
+  <text class="s" x="54" y="374">fullscreen locked to landscape</text>
+  <text class="s" x="54" y="394">YouTube: react-native-youtube-iframe</text>
+  <path class="ln" d="M1060 214 L1060 250 L210 250 L210 278" marker-end="url(#a)"/>
+  <text class="s lbl" x="640" y="245" text-anchor="middle">one source per minted session</text>
+  <rect class="box" x="440" y="280" width="340" height="124" rx="10"/>
+  <text class="t" x="454" y="308">Heartbeats (heartbeat.ts)</text>
+  <text class="s" x="454" y="334">every 15 s, and on pause, end,</text>
+  <text class="s" x="454" y="354">background and unmount</text>
+  <text class="s" x="454" y="374">a seek or scrub never counts</text>
+  <text class="s" x="454" y="394">as watching</text>
+  <path class="ln" d="M380 342 L438 342" marker-end="url(#a)"/>
+  <rect class="acc" x="840" y="280" width="320" height="124" rx="10"/>
+  <text class="t" x="854" y="308">POST /learn/items/:id/progress</text>
+  <text class="s" x="854" y="334">{ positionSeconds, playedSeconds,</text>
+  <text class="s" x="854" y="354">  durationSeconds }</text>
+  <text class="s" x="854" y="374">server keeps furthest_seconds and</text>
+  <text class="s" x="854" y="394">watched_seconds; decides completion</text>
+  <path class="ln" d="M780 342 L838 342" marker-end="url(#a)"/>
+  <text class="k" x="40" y="460">SOURCE REFRESH</text>
+  <rect class="box" x="40" y="476" width="540" height="84" rx="10"/>
+  <text class="s" x="54" y="502">expiresAt within 30 s when play is pressed, or a player error</text>
+  <text class="s" x="54" y="522">(an expired session answers 401 or 403): re-mint, at most 3 times,</text>
+  <text class="s" x="54" y="542">then resume at the same position; otherwise 'Try again'</text>
+  <text class="k" x="620" y="460">CAPTURE PROTECTION</text>
+  <rect class="box" x="620" y="476" width="540" height="84" rx="10"/>
+  <text class="s" x="634" y="502">paid video (not a free course, not a preview) and every</text>
+  <text class="s" x="634" y="522">downloaded copy: Android FLAG_SECURE, iOS overlay on capture</text>
+  <text class="s" x="634" y="542">(react-native-screenguard); CAPTURE_GUARD=off works in debug only</text>
+  <text class="k" x="40" y="610">WATERMARK</text>
+  <rect class="box" x="40" y="626" width="1120" height="64" rx="10"/>
+  <text class="s" x="54" y="652">the text the server sends (for example the learner's email) drifts between spots at low opacity, so it cannot be cropped out</text>
+</svg>

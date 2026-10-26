@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/BricolageGrotesque-Bold.ttf",
+      "sha1": "2ab9990aeb4de67be06a1ee94f0143f597b9db8f"
+    },
+    {
+      "path": "src/assets/fonts/BricolageGrotesque-ExtraBold.ttf",
+      "sha1": "074328bfb5a228c92ee83f4b2f525d7344ae3371"
+    },
+    {
+      "path": "src/assets/fonts/BricolageGrotesque-SemiBold.ttf",
+      "sha1": "a9ef578d4ed929e2e6a28c5880c0c11c9eadd146"
+    },
+    {
+      "path": "src/assets/fonts/HankenGrotesk-Bold.ttf",
+      "sha1": "fb90a99767bdf1d86f701011fc0b359fc57a48b2"
+    },
+    {
+      "path": "src/assets/fonts/HankenGrotesk-Medium.ttf",
+      "sha1": "ad6f38ef2ac49ae47d4fe8610f9f5f2847096ee5"
+    },
+    {
+      "path": "src/assets/fonts/HankenGrotesk-Regular.ttf",
+      "sha1": "4ed01682fcf60b1de774e0590e7f975678c1326a"
+    },
+    {
+      "path": "src/assets/fonts/HankenGrotesk-SemiBold.ttf",
+      "sha1": "f7e412473a2430bd87359086d47f7735cb6ef54e"
+    },
+    {
+      "path": "src/assets/fonts/OFL.txt",
+      "sha1": "555f247f72cc3a22c19b2f7459468dba8993f6f1"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+# Opens one lesson from the classroom's Lessons tab. Only the current lesson's section
+# starts expanded, so when the lesson row is not on screen its section header is tapped
+# first. Rows are matched by their accessibility label ("<title>, <facts>").
+#   env: SECTION  regex for the section row, for example "Section 2: Joins and groups.*"
+#        LESSON   regex for the lesson row, for example "Quiz: joins and aggregation, .*"
+appId: com.example.openlms
+---
+- extendedWaitUntil:
+    visible:
+      id: "learning-classroom-tabs"
+    timeout: 20000
+- tapOn:
+    id: "learning-classroom-tabs-lessons"
+- scrollUntilVisible:
+    element:
+      text: ${LESSON}
+    direction: DOWN
+    timeout: 6000
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        text: ${LESSON}
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: ${SECTION}
+          direction: DOWN
+          timeout: 15000
+      - tapOn:
+          text: ${SECTION}
+      - scrollUntilVisible:
+          element:
+            text: ${LESSON}
+          direction: DOWN
+          timeout: 15000
+- tapOn:
+    text: ${LESSON}

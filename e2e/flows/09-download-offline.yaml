@@ -1,0 +1,83 @@
+# Saves a video lesson for offline viewing and plays the copy from the Downloads screen.
+# The server issues a licence for this device, the app keeps one HLS rendition on disk
+# and the AES key in the Keychain or Keystore, and the copy plays through the in-app
+# loopback server. On Android the flow turns on airplane mode before playing, to prove
+# no network is needed; iOS simulators have no airplane mode, so there it plays online.
+# At the end the copy is deleted, which also frees the licence on the server.
+# Assumes: downloads are on for the academy (settings learning.offline.enabled, on by
+# default, sent to the app as meta.mobile.downloadsEnabled) and the course allows them
+# (courses.allow_downloads, true by default); a debug build with the loopback module.
+# Demo data: juniper.vale@example.com; practical-sql "Your first SELECT" (EVS video).
+appId: com.example.openlms
+name: 09-download-offline
+tags:
+  - learning
+  - downloads
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- openLink: openlms://learn/practical-sql
+- runFlow:
+    file: common/open-lesson.yaml
+    env:
+      SECTION: "Section 1: Asking the database.*"
+      LESSON: "Your first SELECT, .*"
+
+# The download glyph on the lesson row (its label names the state and the lesson).
+- scrollUntilVisible:
+    element:
+      text: "(Download|Downloaded): Your first SELECT"
+    direction: DOWN
+    timeout: 15000
+- runFlow:
+    when:
+      visible: "Download: Your first SELECT"
+    commands:
+      - tapOn: "Download: Your first SELECT"
+- extendedWaitUntil:
+    visible: "Downloaded: Your first SELECT"
+    timeout: 180000
+
+- openLink: openlms://downloads
+- extendedWaitUntil:
+    visible:
+      id: "learning-downloads"
+    timeout: 10000
+- assertVisible:
+    id: "learning-download-row"
+- assertVisible:
+    id: "learning-downloads-summary"
+
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - setAirplaneMode: enabled
+
+- tapOn: "Play Your first SELECT offline"
+- extendedWaitUntil:
+    visible:
+      id: "player"
+    timeout: 15000
+- assertVisible: "Progress is not recorded while you watch offline."
+- tapOn:
+    id: "player-surface"
+- tapOn: "Close"
+
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - setAirplaneMode: disabled
+
+# Delete the copy so the next run starts clean.
+- tapOn: "More for Your first SELECT"
+- tapOn: "(?i)delete"
+- extendedWaitUntil:
+    visible:
+      id: "learning-downloads-empty"
+    timeout: 15000

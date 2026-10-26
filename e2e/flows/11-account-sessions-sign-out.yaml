@@ -1,0 +1,64 @@
+# The account area: the sessions list shows this device, then signing out ends the
+# session on the server (the refresh token and the push token are sent with it) and
+# locally, and it stays signed out after a restart.
+# Demo data: juniper.vale@example.com.
+appId: com.example.openlms
+name: 11-account-sessions-sign-out
+tags:
+  - account
+  - auth
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- scrollUntilVisible:
+    element:
+      id: "account-sessions"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "account-sessions"
+- extendedWaitUntil:
+    visible:
+      id: "account-sessions-screen"
+    timeout: 10000
+- extendedWaitUntil:
+    visible:
+      id: "account-session-row"
+    timeout: 15000
+- assertVisible: "This device.*"
+- assertVisible:
+    id: "account-sessions-sign-out-all"
+- tapOn: "Back"
+
+# Sign out of this device. The alert's buttons are "Cancel" and "Sign out"; the row
+# behind it is also called "Sign out", so the button is picked by its place in the alert.
+- scrollUntilVisible:
+    element:
+      id: "account-sign-out"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "account-sign-out"
+- assertVisible: "Sign out?"
+- tapOn:
+    text: "(?i)sign out"
+    rightOf:
+      text: "(?i)cancel"
+- extendedWaitUntil:
+    visible:
+      id: "account-guest"
+    timeout: 15000
+
+# Still signed out after a restart: nothing usable was left in the Keychain.
+- stopApp
+- launchApp
+- tapOn:
+    id: "tab-account"
+- extendedWaitUntil:
+    visible:
+      id: "account-guest"
+    timeout: 20000

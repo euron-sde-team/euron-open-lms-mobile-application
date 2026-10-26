@@ -1,0 +1,18 @@
+# Maestro workspace config for e2e/flows. Only the top-level flows run; the shared
+# subflows in common/ are called with runFlow and never run on their own.
+flows:
+  - "*"
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - 01-browse-guest
+    - 02-sign-in
+    - 03-classroom-video
+    - 04-quiz
+    - 05-assignment-submit
+    - 06-certificate
+    - 07-android-purchase-razorpay-stub
+    - 08-ios-no-checkout
+    - 09-download-offline
+    - 10-notes-and-qa
+    - 11-account-sessions-sign-out

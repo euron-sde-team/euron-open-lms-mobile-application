@@ -1,0 +1,51 @@
+# Signs in with the demo learner, checks the session survives a restart (the refresh
+# token is in the Keychain or Keystore, the access token is minted again on launch) and
+# that a wrong password shows an error rather than signing anyone in.
+# Demo data: juniper.vale@example.com (has the All-Access plan).
+appId: com.example.openlms
+name: 02-sign-in
+tags:
+  - auth
+---
+- runFlow: common/fresh-start.yaml
+
+# A wrong password stays on the sign-in screen with an error.
+- tapOn:
+    id: "tab-account"
+- tapOn:
+    id: "account-sign-in"
+- tapOn:
+    id: "signin-login"
+- inputText: "juniper.vale@example.com"
+- tapOn:
+    id: "signin-password"
+- inputText: "not-the-demo-password"
+- hideKeyboard
+- tapOn:
+    id: "signin-submit"
+- extendedWaitUntil:
+    visible:
+      id: "signin-error"
+    timeout: 15000
+- tapOn: "Close"
+
+# The real password signs in.
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+- scrollUntilVisible:
+    element:
+      id: "account-sessions"
+    direction: DOWN
+    timeout: 10000
+
+# The session is restored after the app restarts.
+- stopApp
+- launchApp
+- tapOn:
+    id: "tab-account"
+- extendedWaitUntil:
+    visible:
+      id: "account-signed-in"
+    timeout: 20000

@@ -1,0 +1,15 @@
+# Starts the app with no stored session. clearState wipes the app's data, but on iOS the
+# refresh token lives in the Keychain, which survives an uninstall, so it is cleared too.
+appId: com.example.openlms
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - clearKeychain
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: "catalog-home"
+    timeout: 20000

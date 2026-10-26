@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+  <title id="title">Payments by platform</title>
+  <desc id="desc">On Android the app checks out inside the app: it asks for a quote, then starts checkout with an idempotency key reused for the same request. A free order is fulfilled at once. Razorpay opens its native SDK, or against the local stubs the stub page in a WebView, and the payment is confirmed with the server. Stripe opens Checkout in a Custom Tab; it returns to the academy website's https /checkout/app-return page, which hands off to openlms://checkout/return. The result screen polls the order every 2 seconds for up to a minute. On iOS the app shows no price and no buy button. When the admin turns on mobile.iosWebPurchaseLink, paid items show Continue on the website, which opens the browser; a learner who bought on the website signs in to learn.</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; }
+    .acc { fill: #ecfafc; stroke: #0E99AD; stroke-width: 1.6; }
+    .zone { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 6 5; }
+    .h { font: 600 20px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .t { font: 600 15px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .s { font: 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #475569; }
+    .m { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f172a; }
+    .k { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b7f90; }
+    .ln { stroke: #64748b; stroke-width: 1.5; fill: none; }
+    .ld { stroke: #64748b; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+    .la { stroke: #0E99AD; stroke-width: 1.8; fill: none; }
+    .ah { fill: #64748b; }
+    .aa { fill: #0E99AD; }
+    .lbl { paint-order: stroke; stroke: #f8fafc; stroke-width: 5px; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0b1220; }
+      .box { fill: #111a2b; stroke: #2b3a55; }
+      .acc { fill: #0d2a33; stroke: #22b8cc; }
+      .zone { stroke: #475569; }
+      .h, .t, .m { fill: #e2e8f0; }
+      .s { fill: #94a3b8; }
+      .k { fill: #5fd3e3; }
+      .ln, .ld { stroke: #7c8aa5; }
+      .ah { fill: #7c8aa5; }
+      .la { stroke: #22b8cc; }
+      .aa { fill: #22b8cc; }
+      .lbl { stroke: #0b1220; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aa" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="780" rx="14"/>
+  <text class="h" x="40" y="48">Payments by platform</text>
+  <text class="s" x="40" y="72">The server prices every order. Android pays in the app; iOS never sells in the app.</text>
+  <rect class="zone" x="40" y="100" width="1120" height="424" rx="12"/>
+  <text class="k" x="56" y="122">ANDROID: IN-APP CHECKOUT</text>
+  <rect class="box" x="60" y="140" width="200" height="84" rx="10"/>
+  <text class="t" x="74" y="168">Quote</text>
+  <text class="s" x="74" y="194">POST /checkout/quote</text>
+  <text class="s" x="74" y="214">coupon, tax, total</text>
+  <rect class="acc" x="300" y="140" width="220" height="84" rx="10"/>
+  <text class="t" x="314" y="168">Start</text>
+  <text class="s" x="314" y="194">POST /checkout/start</text>
+  <text class="s" x="314" y="214">idempotency key</text>
+  <path class="ln" d="M260 182 L298 182" marker-end="url(#a)"/>
+  <rect class="box" x="580" y="130" width="250" height="64" rx="10"/>
+  <text class="t" x="594" y="158">FULFILLED</text>
+  <text class="s" x="594" y="184">free order: no gateway</text>
+  <rect class="box" x="580" y="214" width="250" height="84" rx="10"/>
+  <text class="t" x="594" y="242">Razorpay</text>
+  <text class="s" x="594" y="268">native SDK; local stubs:</text>
+  <text class="s" x="594" y="288">the stub page in a WebView</text>
+  <rect class="box" x="580" y="318" width="250" height="84" rx="10"/>
+  <text class="t" x="594" y="346">Stripe REDIRECT</text>
+  <text class="s" x="594" y="372">Checkout in a Custom Tab</text>
+  <text class="s" x="594" y="392">closes on the return link</text>
+  <path class="ln" d="M520 182 L550 182 L550 162 L578 162" marker-end="url(#a)"/>
+  <path class="ln" d="M550 182 L550 256 L578 256" marker-end="url(#a)"/>
+  <path class="ln" d="M550 256 L550 360 L578 360" marker-end="url(#a)"/>
+  <rect class="box" x="880" y="214" width="230" height="84" rx="10"/>
+  <text class="t" x="894" y="242">Confirm</text>
+  <text class="s" x="894" y="268">POST razorpay confirm</text>
+  <text class="s" x="894" y="288">server verifies it</text>
+  <path class="ln" d="M830 256 L878 256" marker-end="url(#a)"/>
+  <rect class="box" x="880" y="318" width="230" height="84" rx="10"/>
+  <text class="t" x="894" y="346">Academy website</text>
+  <text class="s" x="894" y="372">/checkout/app-return</text>
+  <text class="s" x="894" y="392">openlms://checkout/return</text>
+  <path class="ln" d="M830 360 L878 360" marker-end="url(#a)"/>
+  <text class="s lbl" x="854" y="352" text-anchor="middle">https</text>
+  <rect class="acc" x="60" y="420" width="1050" height="84" rx="10"/>
+  <text class="t" x="74" y="448">CheckoutResult</text>
+  <text class="s" x="74" y="474">polls the order every 2 s for up to 60 s (the first read syncs with the gateway): paid, failed, canceled or Still confirming;</text>
+  <text class="s" x="74" y="494">on paid it refreshes the catalog, learning and account caches. A replayed tap reuses the key and gets the same order.</text>
+  <path class="ln" d="M995 402 L995 418" marker-end="url(#a)"/>
+  <path class="ln" d="M1110 256 L1128 256 L1128 440 L1112 440" marker-end="url(#a)"/>
+  <path class="ln" d="M830 162 L1146 162 L1146 470 L1112 470" marker-end="url(#a)"/>
+  <rect class="zone" x="40" y="550" width="1120" height="200" rx="12"/>
+  <text class="k" x="56" y="572">iOS: NO IN-APP PURCHASE</text>
+  <rect class="box" x="60" y="590" width="330" height="124" rx="10"/>
+  <text class="t" x="74" y="618">Paid course or bundle</text>
+  <text class="s" x="74" y="644">no price, no Buy button,</text>
+  <text class="s" x="74" y="664">no checkout screen</text>
+  <text class="s" x="74" y="684">(Checkout goes back if opened)</text>
+  <rect class="acc" x="430" y="590" width="330" height="124" rx="10"/>
+  <text class="t" x="444" y="618">mobile.iosWebPurchaseLink on</text>
+  <text class="s" x="444" y="644">"Continue on the website"</text>
+  <text class="s" x="444" y="664">opens the academy website</text>
+  <text class="s" x="444" y="684">in the browser</text>
+  <rect class="box" x="800" y="590" width="340" height="124" rx="10"/>
+  <text class="t" x="814" y="618">Bought on the website</text>
+  <text class="s" x="814" y="644">sign in, and the course</text>
+  <text class="s" x="814" y="664">opens in the app like</text>
+  <text class="s" x="814" y="684">any other enrollment</text>
+  <path class="ln" d="M390 652 L428 652" marker-end="url(#a)"/>
+  <path class="ln" d="M760 652 L798 652" marker-end="url(#a)"/>
+  <text class="s lbl" x="225" y="734" text-anchor="middle">switch off: only "Not enrolled yet" and Sign in</text>
+</svg>

@@ -1,0 +1,53 @@
+# Fast checks run on this repository: lint, typecheck, unit and component tests, the
+# sanitization scan, and the API contract check against euron-open-lms (the vendored
+# types and endpoints in src/api/vendor must match the server's main branch). The full
+# pipeline (Android and iOS builds, gitleaks, CodeQL, Maestro end-to-end on an emulator
+# against a real euron-open-lms stack) lives in .github/workflows-full/: enable it in
+# your fork.
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: lint · typecheck · tests · sanitization
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test --ci
+      - name: Sanitization scan
+        run: scripts/check-sanitization.sh
+
+  contract:
+    name: API contract matches euron-open-lms
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: euron-sde-team/euron-open-lms
+          path: .lms
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: node scripts/sync-types.mjs --check .lms

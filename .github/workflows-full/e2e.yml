@@ -1,0 +1,56 @@
+# End to end on a real Android emulator against a real euron-open-lms stack (its local
+# AWS emulator and the Stripe, Razorpay, AI and video stand-ins), driven by Maestro.
+name: e2e
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: euron-sde-team/euron-open-lms
+          path: .lms
+      - name: Start euron-open-lms (make up, make demo)
+        working-directory: .lms
+        run: |
+          make up
+          make demo | tee demo.txt
+          echo "LMS_DEMO_PASSWORD=$(grep -oE 'password +[^ ]+' demo.txt | awk '{print $2}' | head -1)" >> "$GITHUB_ENV"
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: pnpm install --frozen-lockfile && cp .env.example .env
+      - run: ./gradlew assembleDebug --no-daemon
+        working-directory: android
+      - run: curl -fsSL "https://get.maestro.mobile.dev" | bash && echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          script: |
+            bash scripts/android-reverse.sh
+            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            pnpm start --port 8081 > metro.log 2>&1 &
+            sleep 20
+            maestro test --platform android -e DEMO_PASSWORD="$LMS_DEMO_PASSWORD" e2e/flows

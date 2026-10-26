@@ -1,0 +1,43 @@
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+# React Native Firebase (push) resolves Firebase through Swift Package Manager, which
+# needs dynamically linked frameworks.
+use_frameworks! :linkage => :dynamic
+
+
+target 'OpenLms' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    # With dynamic frameworks every pod links on its own, and some pods call the system
+    # type-identifier APIs (UTType*) without declaring the frameworks that provide them.
+    installer.pods_project.targets.each do |target|
+      next unless %w[RNCClipboard].include?(target.name)
+      target.build_configurations.each do |cfg|
+        flags = Array(cfg.build_settings['OTHER_LDFLAGS'] || '$(inherited)')
+        cfg.build_settings['OTHER_LDFLAGS'] = flags + %w[-framework MobileCoreServices -framework UniformTypeIdentifiers]
+      end
+    end
+
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+  end
+end

@@ -1,0 +1,35 @@
+name: ios
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: simulator build
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: bundle exec pod install
+        working-directory: ios
+      - name: xcodebuild (iOS Simulator, no signing)
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/OpenLms.xcworkspace -scheme OpenLms -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build | tail -50

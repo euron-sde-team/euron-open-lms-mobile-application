@@ -1,0 +1,106 @@
+# Takes a quiz end to end: open it from the classroom, start (or resume) an attempt,
+# answer each question, review, submit, and read the result. The questions can come in
+# any order, so each step taps whichever correct answer is on screen.
+# Demo data: juniper.vale@example.com; practical-sql "Quiz: joins and aggregation"
+# (four questions, pass mark 70, no attempt limit, no timer).
+appId: com.example.openlms
+name: 04-quiz
+tags:
+  - assessments
+  - quiz
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- openLink: openlms://learn/practical-sql
+- runFlow:
+    file: common/open-lesson.yaml
+    env:
+      SECTION: "Section 2: Joins and groups.*"
+      LESSON: "Quiz: joins and aggregation, .*"
+- extendedWaitUntil:
+    visible:
+      id: "learning-quiz-intro"
+    timeout: 15000
+- tapOn:
+    id: "learning-quiz-open"
+- extendedWaitUntil:
+    visible:
+      id: "quiz-intro"
+    timeout: 15000
+
+# Start a new attempt, or resume one left open by the demo seed or an earlier run.
+- runFlow:
+    when:
+      visible:
+        id: "quiz-resume"
+    commands:
+      - tapOn:
+          id: "quiz-resume"
+- runFlow:
+    when:
+      visible:
+        id: "quiz-start"
+    commands:
+      - tapOn:
+          id: "quiz-start"
+- extendedWaitUntil:
+    visible:
+      id: "quiz-runner"
+    timeout: 15000
+
+# One question per screen; the last Next reads "Review" and opens the review list.
+- repeat:
+    times: 6
+    while:
+      visible:
+        id: "quiz-next"
+    commands:
+      - runFlow:
+          when:
+            visible: "HAVING"
+          commands:
+            - tapOn: "HAVING"
+      - runFlow:
+          when:
+            visible: "Every customer, with NULLs where there is no order"
+          commands:
+            - tapOn: "Every customer, with NULLs where there is no order"
+      - runFlow:
+          when:
+            visible: "False"
+          commands:
+            - tapOn: "False"
+      - runFlow:
+          when:
+            visible: "ROW_NUMBER.*"
+          commands:
+            - tapOn: "ROW_NUMBER.*"
+            - tapOn: "LAG.*"
+            - tapOn: "SUM.x. OVER.*"
+      - tapOn:
+          id: "quiz-next"
+
+- extendedWaitUntil:
+    visible:
+      id: "quiz-review"
+    timeout: 5000
+- tapOn:
+    id: "quiz-submit"
+# The confirmation alert: "Keep answering" and "Submit".
+- tapOn:
+    text: "(?i)submit"
+    rightOf:
+      text: "(?i)keep answering"
+- extendedWaitUntil:
+    visible:
+      id: "quiz-result"
+    timeout: 20000
+- assertVisible:
+    id: "quiz-result-status"
+- assertVisible:
+    text: "Passed"
+    optional: true

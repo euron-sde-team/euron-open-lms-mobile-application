@@ -1,0 +1,55 @@
+# iOS only: the app never sells inside the app (App Store rules for reader-style access).
+# A paid course the learner does not own shows no price, no "Buy now" and no coupon
+# field, only "Not enrolled yet". This assumes the academy has left the admin switch
+# mobile.iosWebPurchaseLink off (the default); with it on, the bar shows a "Continue on
+# the website" link (catalog-cta-web) instead, and still no in-app purchase.
+# Demo data: rohan.mehta@example.com does not own product-discovery (PAID). The plans
+# page offers no subscribe action either.
+appId: com.example.openlms
+name: 08-ios-no-checkout
+tags:
+  - ios
+  - checkout
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - runFlow: common/fresh-start.yaml
+
+      # A guest sees no price action.
+      - openLink: openlms://courses/product-discovery
+      - extendedWaitUntil:
+          visible:
+            id: "catalog-purchase-bar"
+          timeout: 15000
+      - assertNotVisible:
+          id: "catalog-cta-buy"
+      - assertNotVisible: "Buy now"
+
+      - runFlow:
+          file: common/sign-in.yaml
+          env:
+            DEMO_EMAIL: "rohan.mehta@example.com"
+
+      - openLink: openlms://courses/product-discovery
+      - extendedWaitUntil:
+          visible:
+            id: "catalog-purchase-bar"
+          timeout: 15000
+      - assertNotVisible:
+          id: "catalog-cta-buy"
+      - assertNotVisible: "Buy now"
+      - assertNotVisible:
+          id: "catalog-coupon-toggle"
+      - assertVisible:
+          id: "catalog-cta-note"
+      - assertVisible: "Not enrolled yet"
+
+      - openLink: openlms://plans
+      - extendedWaitUntil:
+          visible:
+            id: "catalog-plans"
+          timeout: 15000
+      - assertNotVisible:
+          id: "catalog-plan-subscribe"

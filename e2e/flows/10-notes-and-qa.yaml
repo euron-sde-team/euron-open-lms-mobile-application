@@ -1,0 +1,93 @@
+# Writes a note on a video lesson (pinned to the playhead) and asks a question in the
+# lesson's Q&A. Both are personal to the signed-in learner and need a session.
+# Demo data: juniper.vale@example.com; practical-sql "Your first SELECT".
+# The question is checked by the form closing; if the academy holds new posts for
+# moderation it may not be listed right away, so its title is an optional assertion.
+appId: com.example.openlms
+name: 10-notes-and-qa
+tags:
+  - learning
+  - community
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+- evalScript: ${output.stamp = String(Date.now())}
+
+- openLink: openlms://learn/practical-sql
+- runFlow:
+    file: common/open-lesson.yaml
+    env:
+      SECTION: "Section 1: Asking the database.*"
+      LESSON: "Your first SELECT, .*"
+- extendedWaitUntil:
+    visible:
+      id: "learning-item-title"
+    timeout: 15000
+
+# Notes
+- tapOn:
+    id: "learning-classroom-tabs-notes"
+- extendedWaitUntil:
+    visible:
+      id: "learning-notes"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "learning-note-body"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "learning-note-body"
+- inputText: "SELECT picks columns, FROM names the table ${output.stamp}"
+- hideKeyboard
+- tapOn:
+    id: "learning-note-add"
+- extendedWaitUntil:
+    visible: "SELECT picks columns, FROM names the table ${output.stamp}"
+    timeout: 15000
+- assertVisible:
+    id: "learning-note-row"
+
+# Q&A
+- tapOn:
+    id: "learning-classroom-tabs-qa"
+- extendedWaitUntil:
+    visible:
+      id: "learning-qa"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "learning-qa-ask"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "learning-qa-ask"
+- extendedWaitUntil:
+    visible:
+      id: "learning-qa-ask-form"
+    timeout: 5000
+# "Your question" has focus when the form opens.
+- inputText: "Does SELECT star slow queries down ${output.stamp}"
+# The second field; its label text comes first in the tree, then the input.
+- tapOn:
+    text: "Details"
+    index: 1
+- inputText: "I read that listing columns is faster. Is that true for small tables too?"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "learning-qa-post"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "learning-qa-post"
+- extendedWaitUntil:
+    notVisible:
+      id: "learning-qa-ask-form"
+    timeout: 15000
+- assertVisible:
+    text: "Does SELECT star slow queries down ${output.stamp}"
+    optional: true

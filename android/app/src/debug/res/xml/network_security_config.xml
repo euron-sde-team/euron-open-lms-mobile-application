@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug builds only (this file overrides src/main's): plain http is allowed so the app can
+  reach a local euron-open-lms stack (localhost through `pnpm android:reverse`, or a LAN
+  address on a physical device). Release builds use src/main's config: HTTPS only, except
+  the in-app loopback server for downloaded lectures.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

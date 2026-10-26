@@ -1,0 +1,23 @@
+# Signs in from the Account tab with the demo password printed by `make demo`.
+# Callers pass DEMO_EMAIL through runFlow env; DEMO_PASSWORD comes from the command line:
+#   maestro test -e DEMO_PASSWORD=<password> e2e/flows
+# Expects a fresh start (common/fresh-start.yaml): no session yet.
+appId: com.example.openlms
+---
+- tapOn:
+    id: "tab-account"
+- tapOn:
+    id: "account-sign-in"
+- tapOn:
+    id: "signin-login"
+- inputText: ${DEMO_EMAIL}
+- tapOn:
+    id: "signin-password"
+- inputText: ${DEMO_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: "signin-submit"
+- extendedWaitUntil:
+    visible:
+      id: "account-signed-in"
+    timeout: 20000

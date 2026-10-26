@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="910" viewBox="0 0 1200 910" role="img" aria-labelledby="title desc">
+  <title id="title">Native sessions</title>
+  <desc id="desc">Every request carries X-Client native. Sign in returns an access token, kept in memory only, and a refresh token in the body, stored in the Keychain or Keystore with after first unlock, this device only. When a request fails with 401 the transport runs one shared POST /auth/refresh with the refresh token in the body, writes the rotated token to the Keychain before using the new access token, then retries once. The server rotates on every refresh and revokes the whole family when a rotated token is presented again after a 10 second grace. On launch the app reads the Keychain and refreshes once: success is signed in, a refusal is signed out, no network is offline, where only downloaded lectures open. Sign out removes this device's push token, posts /auth/logout with the refresh token and device token, and clears the Keychain, the query cache and the push token.</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; }
+    .acc { fill: #ecfafc; stroke: #0E99AD; stroke-width: 1.6; }
+    .zone { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 6 5; }
+    .h { font: 600 20px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .t { font: 600 15px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .s { font: 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #475569; }
+    .m { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f172a; }
+    .k { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b7f90; }
+    .ln { stroke: #64748b; stroke-width: 1.5; fill: none; }
+    .ld { stroke: #64748b; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+    .la { stroke: #0E99AD; stroke-width: 1.8; fill: none; }
+    .ah { fill: #64748b; }
+    .aa { fill: #0E99AD; }
+    .lbl { paint-order: stroke; stroke: #f8fafc; stroke-width: 5px; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0b1220; }
+      .box { fill: #111a2b; stroke: #2b3a55; }
+      .acc { fill: #0d2a33; stroke: #22b8cc; }
+      .zone { stroke: #475569; }
+      .h, .t, .m { fill: #e2e8f0; }
+      .s { fill: #94a3b8; }
+      .k { fill: #5fd3e3; }
+      .ln, .ld { stroke: #7c8aa5; }
+      .ah { fill: #7c8aa5; }
+      .la { stroke: #22b8cc; }
+      .aa { fill: #22b8cc; }
+      .lbl { stroke: #0b1220; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aa" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="910" rx="14"/>
+  <text class="h" x="40" y="48">Native sessions</text>
+  <text class="s" x="40" y="72">X-Client: native. The refresh token lives in the platform keystore; the access token never leaves memory.</text>
+  <rect class="box" x="20" y="100" width="200" height="48" rx="10"/>
+  <text class="t" x="120.0" y="128" text-anchor="middle">App (session.tsx)</text>
+  <path class="ld" d="M120 148 V886"/>
+  <rect class="acc" x="300" y="100" width="200" height="48" rx="10"/>
+  <text class="t" x="400.0" y="128" text-anchor="middle">Transport (http.ts)</text>
+  <path class="ld" d="M400 148 V886"/>
+  <rect class="box" x="580" y="100" width="200" height="48" rx="10"/>
+  <text class="t" x="680.0" y="128" text-anchor="middle">Keychain / Keystore</text>
+  <path class="ld" d="M680 148 V886"/>
+  <rect class="box" x="900" y="100" width="200" height="48" rx="10"/>
+  <text class="t" x="1000.0" y="128" text-anchor="middle">euron-open-lms API</text>
+  <path class="ld" d="M1000 148 V886"/>
+  <text class="k" x="40" y="186">SIGN IN</text>
+  <path class="ln" d="M120 206 L396 206" marker-end="url(#a)"/>
+  <text class="s lbl" x="260.0" y="198" text-anchor="middle">signIn(email, password)</text>
+  <path class="ln" d="M400 230 L996 230" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="222" text-anchor="middle">POST /auth/login, X-Client: native</text>
+  <path class="ld" d="M1000 262 L404 262" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="254" text-anchor="middle">accessToken, refreshToken, refreshExpiresAt</text>
+  <path class="ln" d="M400 294 L676 294" marker-end="url(#a)"/>
+  <text class="s lbl" x="540.0" y="286" text-anchor="middle">write first</text>
+  <text class="m lbl" x="680" y="318" text-anchor="middle">AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY</text>
+  <text class="s lbl" x="130" y="324" text-anchor="start">access token: memory only</text>
+  <text class="k" x="40" y="370">A REQUEST GETS 401</text>
+  <path class="ln" d="M400 392 L996 392" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="384" text-anchor="middle">GET /api/..., Bearer access token</text>
+  <path class="ld" d="M1000 418 L404 418" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="410" text-anchor="middle">401 TOKEN_EXPIRED (or another refreshable code)</text>
+  <path class="la" d="M400 450 L996 450" marker-end="url(#b)"/>
+  <text class="s lbl" x="700.0" y="442" text-anchor="middle">POST /auth/refresh { refreshToken }</text>
+  <text class="s lbl" x="410" y="470" text-anchor="start">single flight: concurrent 401s share this one call</text>
+  <path class="ld" d="M1000 506 L404 506" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="498" text-anchor="middle">rotated refresh token + new access token</text>
+  <path class="ln" d="M400 534 L676 534" marker-end="url(#a)"/>
+  <text class="s lbl" x="540.0" y="526" text-anchor="middle">store rotation before use</text>
+  <path class="ln" d="M400 562 L996 562" marker-end="url(#a)"/>
+  <text class="s lbl" x="700.0" y="554" text-anchor="middle">retry once with the new access token</text>
+  <rect class="box" x="860" y="578" width="300" height="64" rx="10"/>
+  <text class="s" x="874" y="604">server: a rotated token used again</text>
+  <text class="s" x="874" y="624">after 10 s revokes the whole family</text>
+  <text class="k" x="40" y="676">LAUNCH</text>
+  <path class="ln" d="M120 696 L676 696" marker-end="url(#a)"/>
+  <text class="s lbl" x="400.0" y="688" text-anchor="middle">read the stored refresh token</text>
+  <path class="ln" d="M120 726 L996 726" marker-end="url(#a)"/>
+  <text class="s lbl" x="620.0" y="718" text-anchor="middle">POST /auth/refresh, once</text>
+  <rect class="box" x="140" y="740" width="560" height="44" rx="10"/>
+  <text class="s" x="154" y="766">ok: signedIn · refused: signedOut · no network: offline (Downloads only)</text>
+  <text class="k" x="40" y="816">SIGN OUT</text>
+  <path class="ln" d="M120 836 L996 836" marker-end="url(#a)"/>
+  <text class="s lbl" x="620.0" y="828" text-anchor="middle">DELETE /my/devices/:token, then POST /auth/logout { refreshToken, deviceToken }</text>
+  <path class="ln" d="M120 872 L676 872" marker-end="url(#a)"/>
+  <text class="s lbl" x="400.0" y="864" text-anchor="middle">clear Keychain, query cache, push token</text>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  HTTPS only, everywhere, except the app's own loopback server: downloaded lectures play
+  from http://127.0.0.1:<random port> inside the app (modules/loopback-server). Debug
+  builds also reach the local euron-open-lms stack over http (usesCleartextTraffic).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>

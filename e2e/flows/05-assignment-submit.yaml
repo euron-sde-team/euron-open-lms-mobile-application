@@ -1,0 +1,69 @@
+# Submits a written answer to a reviewed project and sees it waiting for review. When the
+# learner already has a submission waiting or approved (from the demo seed or an earlier
+# run), the composer is closed and the flow checks that instead.
+# Demo data: juniper.vale@example.com; building-reliable-apis "Harden a checkout
+# endpoint" (included in the All-Access plan, no due date, accepts text, files and a URL).
+appId: com.example.openlms
+name: 05-assignment-submit
+tags:
+  - assessments
+  - assignment
+---
+- runFlow: common/fresh-start.yaml
+- runFlow:
+    file: common/sign-in.yaml
+    env:
+      DEMO_EMAIL: "juniper.vale@example.com"
+
+- openLink: openlms://learn/building-reliable-apis
+- runFlow:
+    file: common/open-lesson.yaml
+    env:
+      SECTION: "Section 4: Project.*"
+      LESSON: "Harden a checkout endpoint, .*"
+- extendedWaitUntil:
+    visible:
+      id: "learning-assignment-intro"
+    timeout: 15000
+- tapOn:
+    id: "learning-assignment-open"
+- extendedWaitUntil:
+    visible:
+      id: "assignment"
+    timeout: 15000
+- assertVisible:
+    id: "assignment-rubric"
+    optional: true
+
+- runFlow:
+    when:
+      visible:
+        id: "assignment-composer"
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "assignment-body"
+          direction: DOWN
+          timeout: 10000
+      - tapOn:
+          id: "assignment-body"
+      - inputText: "Added an idempotency key column with a unique index and made the status change a conditional update. A test fires two requests at once."
+      - hideKeyboard
+      - scrollUntilVisible:
+          element:
+            id: "assignment-submit"
+          direction: DOWN
+          timeout: 10000
+      - tapOn:
+          id: "assignment-submit"
+      - extendedWaitUntil:
+          visible:
+            id: "assignment-status"
+          timeout: 20000
+
+# Either way the assignment is now closed for editing until a reviewer responds.
+- scrollUntilVisible:
+    element:
+      text: "(Submitted. Waiting for review.*|Your submission is waiting for review.*|Your work is approved.*)"
+    direction: DOWN
+    timeout: 15000

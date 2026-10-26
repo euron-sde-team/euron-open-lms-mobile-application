@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Offline downloads</title>
+  <desc id="desc">A download asks the server for a licence with POST /learn/items/:itemId/downloads and a random installation id. For HLS the engine fetches the master playlist, keeps one rendition (the highest at or below 720p), fetches its media playlist, downloads the AES-128 key once into the Keychain or Keystore and never to disk, downloads every segment into DocumentDir/downloads/itemId, excluded from backup, and writes a local playlist with relative URIs and the key URI set to key. MP4 lectures are one file. To play, the app starts the loopback server on 127.0.0.1 on a random port with a random token path, hands it the key with setKey, and the player opens the local playlist; the server answers GET and HEAD with byte ranges, only for files under the downloads root, and serves the key from memory. Licences are revalidated on start, on return to the foreground and on reconnect: valid copies get a new expiry, revoked copies are deleted with their key, and a copy past its expiry without revalidation does not play.</desc>
+  <style>
+    .bg { fill: #f8fafc; }
+    .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.2; }
+    .acc { fill: #ecfafc; stroke: #0E99AD; stroke-width: 1.6; }
+    .zone { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 6 5; }
+    .h { font: 600 20px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .t { font: 600 15px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0f172a; }
+    .s { font: 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #475569; }
+    .m { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #0f172a; }
+    .k { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b7f90; }
+    .ln { stroke: #64748b; stroke-width: 1.5; fill: none; }
+    .ld { stroke: #64748b; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+    .la { stroke: #0E99AD; stroke-width: 1.8; fill: none; }
+    .ah { fill: #64748b; }
+    .aa { fill: #0E99AD; }
+    .lbl { paint-order: stroke; stroke: #f8fafc; stroke-width: 5px; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0b1220; }
+      .box { fill: #111a2b; stroke: #2b3a55; }
+      .acc { fill: #0d2a33; stroke: #22b8cc; }
+      .zone { stroke: #475569; }
+      .h, .t, .m { fill: #e2e8f0; }
+      .s { fill: #94a3b8; }
+      .k { fill: #5fd3e3; }
+      .ln, .ld { stroke: #7c8aa5; }
+      .ah { fill: #7c8aa5; }
+      .la { stroke: #22b8cc; }
+      .aa { fill: #22b8cc; }
+      .lbl { stroke: #0b1220; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="aa" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="820" rx="14"/>
+  <text class="h" x="40" y="48">Offline downloads</text>
+  <text class="s" x="40" y="72">A licence from the server, one rendition on disk, the key only in the keystore and in native memory.</text>
+  <text class="k" x="40" y="112">DOWNLOAD</text>
+  <rect class="acc" x="40" y="124" width="260" height="104" rx="10"/>
+  <text class="t" x="54" y="152">POST /learn/items/:id/</text>
+  <text class="s" x="54" y="178">downloads { deviceId }</text>
+  <text class="s" x="54" y="198">licence: offlineExpiresAt,</text>
+  <text class="s" x="54" y="218">watermark, manifest URL</text>
+  <rect class="box" x="330" y="124" width="260" height="104" rx="10"/>
+  <text class="t" x="344" y="152">Master playlist</text>
+  <text class="s" x="344" y="178">pick ONE variant:</text>
+  <text class="s" x="344" y="198">highest at or under 720p</text>
+  <text class="s" x="344" y="218">(separate audio: refused)</text>
+  <rect class="box" x="620" y="124" width="260" height="104" rx="10"/>
+  <text class="t" x="634" y="152">Media playlist</text>
+  <text class="s" x="634" y="178">segments, init map,</text>
+  <text class="s" x="634" y="198">one AES-128 key</text>
+  <text class="s" x="634" y="218">(SAMPLE-AES, rotation: refused)</text>
+  <rect class="acc" x="910" y="124" width="250" height="104" rx="10"/>
+  <text class="t" x="924" y="152">AES-128 key</text>
+  <text class="s" x="924" y="178">fetched once</text>
+  <text class="s" x="924" y="198">Keychain / Keystore only</text>
+  <text class="s" x="924" y="218">never written to disk</text>
+  <path class="ln" d="M300 176 L328 176" marker-end="url(#a)"/>
+  <path class="ln" d="M590 176 L618 176" marker-end="url(#a)"/>
+  <path class="ln" d="M880 176 L908 176" marker-end="url(#a)"/>
+  <rect class="box" x="330" y="258" width="550" height="104" rx="10"/>
+  <text class="t" x="344" y="286">DocumentDir/downloads/&lt;itemId&gt;/</text>
+  <text class="s" x="344" y="312">s00000.ts ... (3 at a time, resumes on .part files)</text>
+  <text class="s" x="344" y="332">index.m3u8: relative URIs, URI="key"</text>
+  <text class="s" x="344" y="352">excluded from iCloud backup; Android allowBackup=false</text>
+  <path class="ln" d="M750 228 L750 256" marker-end="url(#a)"/>
+  <rect class="box" x="910" y="258" width="250" height="104" rx="10"/>
+  <text class="t" x="924" y="286">Downloads index</text>
+  <text class="s" x="924" y="312">MMKV prefs, per learner</text>
+  <text class="s" x="924" y="332">2 items run at a time;</text>
+  <text class="s" x="924" y="352">MP4 is one file</text>
+  <text class="k" x="40" y="420">PLAY OFFLINE</text>
+  <rect class="box" x="40" y="432" width="260" height="104" rx="10"/>
+  <text class="t" x="54" y="460">offlineSource()</text>
+  <text class="s" x="54" y="486">copy is done and its</text>
+  <text class="s" x="54" y="506">licence has not expired</text>
+  <text class="s" x="54" y="526">setKey(itemId, key)</text>
+  <rect class="acc" x="330" y="432" width="550" height="104" rx="10"/>
+  <text class="t" x="344" y="460">Loopback server on 127.0.0.1:&lt;random port&gt;</text>
+  <text class="s" x="344" y="486">/&lt;token&gt;/&lt;itemId&gt;/index.m3u8, segments, /key</text>
+  <text class="s" x="344" y="506">GET and HEAD, single Range; files under the root only</text>
+  <text class="s" x="344" y="526">key served from memory; Cache-Control: no-store</text>
+  <rect class="box" x="910" y="432" width="250" height="104" rx="10"/>
+  <text class="t" x="924" y="460">Player</text>
+  <text class="s" x="924" y="486">the same player,</text>
+  <text class="s" x="924" y="506">capture protection always</text>
+  <text class="s" x="924" y="526">on, licence watermark</text>
+  <path class="ln" d="M300 484 L328 484" marker-end="url(#a)"/>
+  <path class="ln" d="M880 484 L908 484" marker-end="url(#a)"/>
+  <path class="ld" d="M605 362 L605 430" marker-end="url(#a)"/>
+  <text class="s lbl" x="612" y="400" text-anchor="start">reads files</text>
+  <text class="k" x="40" y="594">REVALIDATE</text>
+  <rect class="box" x="40" y="606" width="260" height="84" rx="10"/>
+  <text class="t" x="54" y="634">When</text>
+  <text class="s" x="54" y="660">app start, foreground,</text>
+  <text class="s" x="54" y="680">reconnect (10 min apart)</text>
+  <rect class="acc" x="330" y="606" width="300" height="84" rx="10"/>
+  <text class="t" x="344" y="634">POST /my/downloads/validate</text>
+  <text class="s" x="344" y="660">{ deviceId, itemIds }</text>
+  <rect class="box" x="660" y="606" width="240" height="84" rx="10"/>
+  <text class="t" x="674" y="634">valid</text>
+  <text class="s" x="674" y="660">offlineExpiresAt slides</text>
+  <text class="s" x="674" y="680">forward</text>
+  <rect class="box" x="920" y="606" width="240" height="84" rx="10"/>
+  <text class="t" x="934" y="634">revoked</text>
+  <text class="s" x="934" y="660">files and key deleted</text>
+  <text class="s" x="934" y="680">on this phone</text>
+  <path class="ln" d="M300 648 L328 648" marker-end="url(#a)"/>
+  <path class="ln" d="M630 648 L658 648" marker-end="url(#a)"/>
+  <path class="ln" d="M480 690 L480 716 L1040 716 L1040 692" marker-end="url(#a)"/>
+  <text class="s" x="40" y="760">No network: copies keep their last expiry and stop playing after it. Another account signing in on the phone deletes the previous</text>
+  <text class="s" x="40" y="782">learner's copies. Removing a copy frees its licence on the server.</text>
+</svg>

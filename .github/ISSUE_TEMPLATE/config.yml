@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/euron-sde-team/euron-open-lms-mobile-application/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: Server problems (euron-open-lms)
+    url: https://github.com/euron-sde-team/euron-open-lms/issues
+    about: Issues with the API, the website or admin belong to the server repository.
