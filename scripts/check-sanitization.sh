@@ -114,9 +114,10 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
   fi
 fi
 
-# Env files: only *.example may be tracked.
+# Env files: only *.example may be tracked (and ios/.xcode.env, React Native's Xcode
+# setting that only names the node binary).
 if git rev-parse --git-dir >/dev/null 2>&1; then
-  tracked="$(git ls-files -- '*.env' '.env' '.env.*' '**/.env' '**/.env.*' | grep -v '\.example$' || true)"
+  tracked="$(git ls-files -- '*.env' '.env' '.env.*' '**/.env' '**/.env.*' | grep -v '\.example$' | grep -v '^ios/\.xcode\.env$' || true)"
   if [[ -n "$tracked" ]]; then
     printf '\n\033[31m✗ Committed env file(s)\033[0m\n%s\n' "$tracked"
     failed=1
